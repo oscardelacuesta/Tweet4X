@@ -1,8 +1,8 @@
 <?php
-$host = 'db5016201241.hosting-data.io'; // Nombre del servicio en docker-compose
-$dbname = 'dbs13186729';
-$user = 'dbu1812785';
-$pass = 'Etweet1234;;';
+$host = 'elhost'; // Nombre del servicio en docker-compose
+$dbname = 'labase';
+$user = 'elusuario';
+$pass = 'lapassword';
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);

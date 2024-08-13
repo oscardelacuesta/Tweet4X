@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>:: Tweet4X :: La red social alternativa a twitter de la Generación X ::</title>
+    <title>:: Tweet4X :: La red social libre, gratuita y alternativa de la Generación X ::</title>
     <!-- Forzar la actualización del CSS -->
     <link rel="stylesheet" href="css/styles.css?v=1.0">
     <style>
@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <div class="login-container">
         <h1>:: Tweet4X ::</h1> 
-        <h3>La red social alternativa a twitter de la Generación X</h3> 
+        <h3>La red social libre, gratuita y alternativa de la Generación X ::</h3> 
         <?php if (isset($error)): ?>
             <p class="error"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></p>
         <?php endif; ?>

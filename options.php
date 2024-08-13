@@ -43,37 +43,72 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
     $date_of_birth = filter_input(INPUT_POST, 'date_of_birth', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $descripcion = filter_input(INPUT_POST, 'descripcion', FILTER_SANITIZE_FULL_SPECIAL_CHARS); // Filtrar la descripción
+    $current_password = $_POST['current_password'] ?? null;
+    $new_password = $_POST['new_password'] ?? null;
+    $confirm_new_password = $_POST['confirm_new_password'] ?? null;
 
-    // Crear carpeta específica para el usuario si no existe
-    $userUploadDir = 'uploads/profile_pictures/' . $user_id;
-    if (!file_exists($userUploadDir)) {
-        mkdir($userUploadDir, 0777, true);
-    }
+    // Verificar si el correo electrónico ya está en uso por otro usuario
+    $emailCheckStmt = $pdo->prepare("SELECT id FROM users WHERE email = ? AND id != ?");
+    $emailCheckStmt->execute([$email, $user_id]);
+    if ($emailCheckStmt->fetch()) {
+        $error = 'El correo electrónico ya está en uso por otro usuario.';
+    } else {
+        // Crear carpeta específica para el usuario si no existe
+        $userUploadDir = 'uploads/profile_pictures/' . $user_id;
+        if (!file_exists($userUploadDir)) {
+            mkdir($userUploadDir, 0777, true);
+        }
 
-    // Verificar y manejar la imagen de perfil
-    if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] === UPLOAD_ERR_OK) {
-        $profile_picture = basename($_FILES['profile_picture']['name']);
-        $uploadFile = $userUploadDir . '/' . $profile_picture;
-        if (move_uploaded_file($_FILES['profile_picture']['tmp_name'], $uploadFile)) {
-            $profile_picture = $user_id . '/' . $profile_picture; // Guardar la ruta relativa
-        } else {
-            $error = 'Error al subir la imagen.';
+        // Verificar y manejar la imagen de perfil
+        if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] === UPLOAD_ERR_OK) {
+            $profile_picture = basename($_FILES['profile_picture']['name']);
+            $uploadFile = $userUploadDir . '/' . $profile_picture;
+            if (move_uploaded_file($_FILES['profile_picture']['tmp_name'], $uploadFile)) {
+                $profile_picture = $user_id . '/' . $profile_picture; // Guardar la ruta relativa
+            } else {
+                $error = 'Error al subir la imagen.';
+            }
+        }
+
+        // Actualizar la contraseña si se ha solicitado
+        if ($current_password && $new_password && $confirm_new_password) {
+            // Verificar la contraseña actual
+            $passwordStmt = $pdo->prepare("SELECT password FROM users WHERE id = ?");
+            $passwordStmt->execute([$user_id]);
+            $stored_password = $passwordStmt->fetchColumn();
+
+            if (password_verify($current_password, $stored_password)) {
+                if ($new_password === $confirm_new_password) {
+                    $hashed_new_password = password_hash($new_password, PASSWORD_BCRYPT);
+                    $updatePasswordStmt = $pdo->prepare("UPDATE users SET password = :new_password WHERE id = :id");
+                    $updatePasswordStmt->execute([
+                        ':new_password' => $hashed_new_password,
+                        ':id' => $user_id
+                    ]);
+                    $success = 'Contraseña actualizada correctamente.';
+                } else {
+                    $error = 'La nueva contraseña y la confirmación no coinciden.';
+                }
+            } else {
+                $error = 'La contraseña actual no es correcta.';
+            }
+        }
+
+        // Actualizar los datos del usuario en la base de datos si no hay errores
+        if (!isset($error)) {
+            $updateStmt = $pdo->prepare("UPDATE users SET username = :username, email = :email, date_of_birth = :date_of_birth, profile_picture = :profile_picture, descripcion = :descripcion WHERE id = :id");
+            $updateStmt->execute([
+                ':username' => $username,
+                ':email' => $email,
+                ':date_of_birth' => $date_of_birth,
+                ':profile_picture' => $profile_picture,
+                ':descripcion' => $descripcion, // Actualizar la descripción
+                ':id' => $user_id
+            ]);
+
+            $success = 'Datos actualizados correctamente.';
         }
     }
-
-    // Actualizar los datos del usuario en la base de datos
-    $updateStmt = $pdo->prepare("UPDATE users SET username = :username, email = :email, date_of_birth = :date_of_birth, profile_picture = :profile_picture, descripcion = :descripcion WHERE id = :id");
-    $updateStmt->execute([
-        ':username' => $username,
-        ':email' => $email,
-        ':date_of_birth' => $date_of_birth,
-        ':profile_picture' => $profile_picture,
-        ':descripcion' => $descripcion, // Actualizar la descripción
-        ':id' => $user_id
-    ]);
-
-    header('Location: options.php'); // Redirigir después de guardar los cambios
-    exit;
 }
 ?>
 
@@ -179,11 +214,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <label for="profile_picture">Foto de perfil:</label>
             <input type="file" name="profile_picture" id="profile_picture">
 
+            <label for="current_password">Contraseña Actual:</label>
+            <input type="password" name="current_password" id="current_password">
+
+            <label for="new_password">Nueva Contraseña:</label>
+            <input type="password" name="new_password" id="new_password">
+
+            <label for="confirm_new_password">Confirmar Nueva Contraseña:</label>
+            <input type="password" name="confirm_new_password" id="confirm_new_password">
+
             <button type="submit">Guardar cambios</button>
         </form>
 
         <?php if (isset($error)): ?>
             <p class="error"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></p>
+        <?php endif; ?>
+
+        <?php if (isset($success)): ?>
+            <p class="success"><?php echo htmlspecialchars($success, ENT_QUOTES, 'UTF-8'); ?></p>
         <?php endif; ?>
 
         <img src="<?php echo htmlspecialchars($profile_picture_path, ENT_QUOTES, 'UTF-8'); ?>" alt="Foto de Perfil" class="profile-picture-preview">
