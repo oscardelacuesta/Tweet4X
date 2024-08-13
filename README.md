@@ -19,14 +19,14 @@
 
 ## Instalación
 
-Sigue los siguientes pasos para configurar y ejecutar **Tweet4X** en tu máquina local.
-El fichero init.sql contiene el script de instalación de la base de datos.
-El fichero db.php contiene los datos de acceso a la base de datos.
-Por dejecto para entrar el usuario administrador: admin, contraseña: adminpassword
-Es necesario permisos de escritura en la carpeta uploads para las imagenes y perfiles.
-Puedes ver una demo en:
+- Sigue los siguientes pasos para configurar y ejecutar **Tweet4X** en tu máquina local.
+- El fichero init.sql contiene el script de instalación de la base de datos.
+- El fichero db.php contiene los datos de acceso a la base de datos.
+- Por dejecto para entrar el usuario administrador: admin, contraseña: adminpassword
+- Es necesario permisos de escritura en la carpeta uploads para las imagenes y perfiles.
+- Puedes ver una demo en:
 https://palentino.es/tweet4x/
-Saludos.
+- Saludos.
 
 
 ## 1. Clonar el Repositorio
