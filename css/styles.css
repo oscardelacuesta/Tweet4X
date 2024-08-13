@@ -1,0 +1,223 @@
+/* General styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e8f5ff; /* Fondo de color azul claro */
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 90%;
+    max-width: 1000px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+header img.profile-picture {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    margin-right: 20px;
+}
+
+h2 {
+    color: #4a148c; /* Morado oscuro para el título */
+}
+
+nav {
+    margin-bottom: 20px;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+nav ul li {
+    margin: 0 10px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #6a1b9a; /* Morado claro para los enlaces */
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 4px;
+    position: relative;
+}
+
+nav ul li a::after {
+    content: "";
+    display: block;
+    height: 3px;
+    background: #6a1b9a; /* Línea morada debajo del enlace */
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    right: 0;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+nav ul li a:hover::after {
+    transform: scaleX(1);
+}
+
+nav ul li a:hover {
+    background-color: #d1c4e9; /* Morado claro en hover */
+}
+
+.stats p {
+    margin: 5px 0;
+    font-weight: bold;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+form textarea,
+form input[type="text"],
+form input[type="email"],
+form input[type="password"],
+form input[type="date"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+form input[type="file"] {
+    margin-bottom: 10px;
+    border: 1px solid #d1c4e9;
+    padding: 5px;
+    border-radius: 4px;
+    background-color: #ffffff;
+}
+
+form input[type="file"]::-webkit-file-upload-button {
+    background: #6a1b9a; /* Botón de seleccionar archivo morado */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+form input[type="file"]::-webkit-file-upload-button:hover {
+    background: #4a148c; /* Hover del botón de seleccionar archivo */
+}
+
+form button[type="submit"] {
+    background-color: #6a1b9a;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+form button[type="submit"]:hover {
+    background-color: #4a148c;
+}
+
+h3 {
+    margin-top: 30px;
+    color: #4a148c;
+}
+
+#tweets .tweet {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.tweet p {
+    margin: 5px 0;
+}
+
+.tweet-media {
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+}
+
+.retweet {
+    background-color: #6a1b9a;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.retweet:hover {
+    background-color: #4a148c;
+}
+
+.register-container,
+.login-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+p.error {
+    color: #ff0000;
+    text-align: center;
+}
+
+p a {
+    color: #6a1b9a;
+    text-decoration: none;
+}
+
+p a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+    .container {
+        width: 100%;
+        padding: 15px;
+    }
+
+    header img.profile-picture {
+        width: 50px;
+        height: 50px;
+    }
+
+    .register-container,
+    .login-container {
+        width: 90%;
+        padding: 15px;
+    }
+
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    nav ul li {
+        margin: 5px 0;
+    }
+}
